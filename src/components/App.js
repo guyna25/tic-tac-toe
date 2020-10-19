@@ -2,7 +2,6 @@ import React from 'react';
 
 
 //TODO make end game
-//TODO restart
 //TODO score
 //TODO visual turn
 /**
@@ -11,7 +10,7 @@ import React from 'react';
 class App extends React.Component {
   #PLAYER_1_SIGN = "X";
   #PLAYER_2_SIGN = "O";
-  #NO_SIGN = "";
+  #NO_SIGN = null;
   #START_STATE = {
     'turn' : 0,
     'haveWon': 0
@@ -100,21 +99,35 @@ class App extends React.Component {
     }
 
   render() {
-    var res = [];
+    let grid = [];
     for (let i=0;i<this.state.board.length;i++) {
-      res.push( this.Square({'value':this.NO_SIGN, 
+      grid.push( this.Square({'value':this.NO_SIGN, 
                              'onClick': e => this.onBoardClick({'event':e, 'idx':i}), 
                              'idx': i}));
-      if (i % this.state.BOARD_SIZE === 2) {
-        res.push(<br/>);
-      }
+      
     }
     return (
       <div>
-        {res}
-        <button  key={'reset'} onClick={() => this.reset(this)} >
+        <div className="board-row">
+          {grid[0]}
+          {grid[1]}
+          {grid[2]}
+        </div>
+        <div className="board-row">
+          {grid[3]}
+          {grid[4]}
+          {grid[5]}
+        </div>
+        <div className="board-row">
+          {grid[6]}
+          {grid[7]}
+          {grid[8]}
+        </div>
+        <div className="reset">
+          <button  key={'reset'} onClick={() => this.reset(this)} >
           Reset baby
-        </button>
+          </button>
+        </div>
       </div>
     );
   }
