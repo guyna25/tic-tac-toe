@@ -1,19 +1,17 @@
 import React from 'react';
 
-
-//TODO make end game
 //TODO score
-//TODO visual turn
 /**
  * Board component of tic tac toe
  */
 class App extends React.Component {
-  #PLAYER_1_SIGN = "X";
-  #PLAYER_2_SIGN = "O";
-  #NO_SIGN = null;
+  #PLAYER_1_SIGN = 'X';
+  #PLAYER_2_SIGN = 'O';
+  #NO_SIGN = ' ';
   #START_STATE = {
     'turn' : 0,
-    'haveWon': 0
+    'haveWon': 0,
+    'human': true //true means both players are human
   };
   constructor(props)
   {
@@ -84,16 +82,30 @@ class App extends React.Component {
     }
   }
 
+  changeMode(props) {
+    props.target.setState({'human': props.value});
+  }
+
   Square(props) {
+    let sign;
+    if (this.state.board[props.idx] === this.#NO_SIGN) {
+      sign = './toe.png';
+    } else if (this.state.board[props.idx] === this.#PLAYER_1_SIGN){
+      sign = './tic.png';
+    } else {
+      sign = './tac.png';
+    }
     let style = {
-      'height': '50px',
-      'width': '50px',
-      'backgroundcolor': 'white',
-      'fontsize': '30px'
+      'backgroundImage': sign,
+      'height': '30px',
+      'width': '30px',
+      'borderColor':'black',
+      'border':'10px',
+      'padding':'5px'
     };
     return (
-        <button  key={String(props.idx)} className="square" onClick={props.onClick} style={style} >
-          {this.state.board[props.idx]}
+        <button  key={String(props.idx)} className="square" onClick={props.onClick}>
+          <img src={sign} style={style} alt=''/>
         </button>
       );
     }
@@ -108,6 +120,9 @@ class App extends React.Component {
     }
     return (
       <div>
+        <div>
+          The current player: {this.state.turn == 0 ? this.#PLAYER_1_SIGN : this.#PLAYER_2_SIGN}
+        </div>
         <div className="board-row">
           {grid[0]}
           {grid[1]}
@@ -122,9 +137,20 @@ class App extends React.Component {
           {grid[6]}
           {grid[7]}
           {grid[8]}
+          <br/>
+        </div>
+        <div className="mode">
+          Play with: 
+          <br/>
+          <button key='mode' onClick={() => this.changeMode({'target':this, 'value':true})}>
+            HUMAN
+          </button>
+          <button key='mode' onClick={() => this.changeMode({'target':this, 'value':false})}>
+            LIZARDBOT
+          </button>
         </div>
         <div className="reset">
-          <button  key={'reset'} onClick={() => this.reset(this)} >
+          <button  key='reset' onClick={() => this.reset(this)} >
           Reset baby
           </button>
         </div>
